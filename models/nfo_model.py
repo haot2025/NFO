@@ -102,7 +102,7 @@ class nfoModel(BaseModel):
         # Get normalised low resolution FOD images
         fodlr = torch.from_numpy(fodlr.copy()).to(self.device)
         fodlr = torch.nn.functional.pad(fodlr, (0, 0, 5, 5, 5, 5, 5, 5), "constant", 0)
-        self.normalised_fodlr = fodlr  # (fodlr - self.fodlr_mean) / self.fodlr_std
+        self.normalised_fodlr = fodlr
 
     def forward(self):
         """Run forward pass; called by both functions <optimize_parameters> and <test>.
@@ -123,8 +123,7 @@ class nfoModel(BaseModel):
 
     @torch.no_grad()
     def conventional_test(self, sr_fod_path):
-        """Perform FOD super resolution following FOD-Net
-        """
+    
         output_directory_path = os.path.dirname(sr_fod_path)
         os.makedirs(output_directory_path, exist_ok=True)
 
@@ -133,9 +132,6 @@ class nfoModel(BaseModel):
 
         size_3d_patch = 9
         margin = int(size_3d_patch / 2)
-
-        '''fodgt_std = self.fodgt_std.squeeze(0).squeeze(0).squeeze(0)
-        fodgt_mean = self.fodgt_mean.squeeze(0).squeeze(0).squeeze(0)'''
 
         print('Start FOD super resolution:')
         print(self.index_length)
@@ -157,7 +153,7 @@ class nfoModel(BaseModel):
             self.fodlr = torch.stack(
                 [self.fodlr.float(), tensor_helper.float()])
             self.forward()
-            fodsr[x, y, z, :] = self.fodpred[0, :]  # * fodgt_std + fodgt_mean
+            fodsr[x, y, z, :] = self.fodpred[0, :]
 
         # Mask out zero regions
         fodsr *= self.brain_mask.unsqueeze(-1)
