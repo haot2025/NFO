@@ -1,1 +1,1 @@
-# NFO
+# Neural Fiber Operator (NFO)
