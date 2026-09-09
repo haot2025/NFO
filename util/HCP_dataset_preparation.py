@@ -1,8 +1,4 @@
-"""FOD-Net
-Fiber orientation distribution super resolution
-Licensed under the CC BY-NC-SA 4.0 License (see LICENSE for details)
-Written by Rui Zeng @ The University of Sydney (r.zeng@outlook.com / rui.zeng@sydney.edu.au)
-"""
+
 
 import os
 import argparse
